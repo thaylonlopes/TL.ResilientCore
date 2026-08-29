@@ -2,6 +2,7 @@ using ClaimsPrincipalExtensionsLibrary;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MiddlewareLibrary.Extensions;
 using Scalar.AspNetCore;
 using TL.ResilientCore.Api.Extensions;
 using TL.ResilientCore.Application;
@@ -31,6 +32,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(); 
 
 var app = builder.Build();
+
+app.UseExceptionHandling();
+app.UseRequestTiming();
 
 if (app.Environment.IsDevelopment())
 {

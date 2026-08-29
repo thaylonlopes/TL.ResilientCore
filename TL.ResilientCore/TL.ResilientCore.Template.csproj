@@ -6,7 +6,7 @@
     <Title>TL.ResilientCore Starter Kit</Title>
     <Authors>Thaylon Lopes</Authors>
     <Description>Template .NET corporativo com Clean Architecture, DDD, CQRS, Result Pattern, Outbox Pattern com Dead Letter Queue e Automated Testing Suite.</Description>
-    <PackageTags>dotnet-new;templates;clean-architecture;cqrs;outbox;ddd;testcontainers;mediatr;dead-letter-queue</PackageTags>
+    <PackageTags>dotnet-new;templates;clean-architecture;cqrs;outbox;ddd;testcontainers;mediatr;dead-letter-queue;k6;load-tests</PackageTags>
     <TargetFramework>net9.0</TargetFramework>
 
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -18,9 +18,10 @@
     <NoWarn>$(NoWarn);NU5128</NoWarn>
   </PropertyGroup>
 
-  <ItemGroup>    
-    <Content Include="src\**\*;tests\**\*;docs\**\*;*.sln;docker-compose*.yml" 
-             Exclude="**\bin\**;**\obj\**;**\*.user;**\artifacts\**;**\nupkg\**" />
+  <ItemGroup>
+    <!-- Inclusão explícita dos arquivos da solução + metadados de template .template.config + load-tests -->
+    <Content Include=".template.config\**\*;src\**\*;tests\**\*;docs\**\*;load-tests\**\*;*.sln;docker-compose*.yml" 
+             Exclude="**\bin\**;**\obj\**;**\*.user;**\artifacts\**;**\nupkg\**;**\load-tests\results\**" />
     <Compile Remove="**\*" />
 
     <None Include="..\README.md" Pack="true" PackagePath="\" />

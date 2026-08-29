@@ -1,54 +1,70 @@
-# 🚀 TL.ResilientCore: Guia de Início Rápido (Getting Started)
+# TL.ResilientCore: Guia de Início Rápido (Getting Started)
 
-Bem-vindo ao **TL.ResilientCore**. Este documento destina-se aos desenvolvedores que acabaram de gerar um novo projeto a partir deste template e precisam entender onde colocar as mãos primeiro e como a arquitetura funciona por baixo dos panos.
+Bem-vindo ao **TL.ResilientCore**. Este documento destina-se aos desenvolvedores que acabaram de gerar um novo projeto a partir deste template e precisam entender a estrutura inicial, o fluxo de desenvolvimento e as convenções arquiteturais.
 
-## 🛠️ 1. Ambiente Local 
+---
 
-Antes de escrever qualquer código, você precisa do ambiente de dados (Banco de Dados e Cache) rodando. Para garantir consistência entre as máquinas de todos os desenvolvedores, não instale bancos de dados manualmente na sua máquina. Use o Docker.
+## 1. Ambiente Local
 
-Na raiz do seu projeto recém-criado, rode:
+Antes de iniciar a API, certifique-se de que os serviços de banco de dados e cache estejam em execução via Docker Compose.
+
+Na raiz do projeto, execute:
 
 ```bash
 docker-compose up -d
 ```
 
-Isso subirá instantaneamente o PostgreSQL (Porta 5432) e o Redis (Porta 6379), perfeitamente configurados para receberem conexões da sua API.
+Isso provisionará as seguintes instâncias:
+- **PostgreSQL 16** (Porta 5432)
+- **Redis** (Porta 6379)
 
-## 🏗️ 2. Como criar uma nova funcionalidade (O Fluxo de Trabalho)
-Este template usa Clean Architecture e CQRS rigorosamente. Para criar uma nova funcionalidade (ex: "Criar Cliente"), siga este fluxo de fora para dentro:
+---
+
+## 2. Fluxo de Criação de Novas Funcionalidades
+
+O template adota rigorosamente os princípios de **Clean Architecture** e **CQRS**. Para criar uma nova funcionalidade (ex: criação de clientes), siga o fluxo de dentro para fora:
 
 ### Passo A: Domínio (src/Core/Domain)
-
-1. Crie a entidade Cliente herdando de AggregateRoot (ou Entity).
-
-2.  Centralize as regras de negócio nos métodos da entidade.
-
-Regra de Ouro: NUNCA lance exceções (throw). Se algo falhar (ex: e-mail inválido), retorne um `Result.Failure(DomainErrors.EmailInvalido`). (Consulte a ADR-002 para mais detalhes).
+1. Crie a entidade ou agregado herdando de `AggregateRoot` ou `Entity`.
+2. Mantenha os construtores protegidos/privados e exponha Factory Methods (ex: `Cliente.Create(...)`).
+3. Centralize as regras de negócio nos métodos do domínio.
+4. **Convenção de Erros**: Utilize o **Result Pattern** (`Result.Success` ou `Result.Failure(Error)`) em vez de lançar exceções de fluxo (consulte a [ADR-002](adr/002-result-pattern.md)).
 
 ### Passo B: Aplicação (src/Core/Application)
-1. Crie o contrato de escrita herdando de `ICommand` (ex: `CreateClientCommand`).
-
-2. Crie o caso de uso implementando `ICommandHandler`. Aqui você irá orquestrar o fluxo: injetar o repositório, chamar as regras da entidade e confirmar a transação.
-
-3. Mágica da Validação: Crie um validator do FluentValidation (`CreateClientCommandValidator`). Você NÃO precisa validar isso manualmente no seu handler. O nosso `ValidationBehavior` interceptará o comando antes dele rodar, executará o FluentValidation e, se falhar, retornará o erro encapsulado no Result automaticamente!
+1. Defina o contrato de comando herdando de `ICommand` ou `ICommand<TResponse>` (ex: `CreateClienteCommand`).
+2. Implemente o respectivo handler com `ICommandHandler<TCommand, TResponse>`.
+3. **Validação Automática**: Crie uma classe de validação herdando de `AbstractValidator<TCommand>` com o FluentValidation. O `ValidationBehavior` interceptará automaticamente o pipeline do MediatR e executará a validação antes do handler.
 
 ### Passo C: Apresentação (src/Presentation/Api)
-Crie o seu endpoint na Minimal API (no `Program.cs` ou usando pacotes como FastEndpoints).
-Use o nosso método de extensão `ToHttpResult()` para converter instantaneamente o retorno do caso de uso em uma resposta HTTP padronizada (200 OK ou 400 Bad Request):
+1. Exponha o endpoint na Minimal API (em `Program.cs` ou módulos dedicados).
+2. Utilize o método de extensão `.ToHttpResult()` para converter o retorno `Result<T>` diretamente no status code HTTP apropriado (200 OK, 400 Bad Request, 404 Not Found):
 
-```c#
-app.MapPost("/clientes", async (CreateClientCommand command, ISender sender) => 
+```csharp
+app.MapPost("/clientes", async (CreateClienteCommand command, ISender sender, CancellationToken ct) => 
 {
-    var result = await sender.Send(command);
-    return result.ToHttpResult(); // Converte Result<T> em HTTP Response sem try/catch
+    var result = await sender.Send(command, ct);
+    return result.ToHttpResult();
 });
 ```
-## ⚙️ 3. Segredos da Infraestrutura (O que você precisa saber)
-O código deste template possui proteções nativas contra falhas distribuídas. Entenda as engrenagens principais:
 
-### O "Milagre" do UnitOfWork e da Outbox
-Quando o seu `CommandHandler` chamar o `IUnitOfWork.SaveChangesAsync()`, duas coisas incríveis acontecem na camada de Infraestrutura, invisíveis para a sua regra de negócio:
+---
 
-1. Interceptor do EF Core: O `InsertOutboxMessagesInterceptor` varrerá sua entidade, extrairá todos os Domain Events que você gerou (`RaiseDomainEvent()`) e os salvará na tabela de Outbox na mesma transação do banco. Isso garante que nunca perderemos eventos.
+## 3. Mecanismos de Infraestrutura e Resiliência
 
-2. Índice Filtrado (Performance Extrema): O nosso worker em background (`ProcessOutboxMessagesJob`) roda a cada 10 segundos buscando mensagens na Outbox. Graças à nossa configuração de Filtered Index no EF Core (`.HasFilter("\"ProcessedOnUtc\" IS NULL")`), essa busca na fila demora menos de 1 milissegundo, mesmo que a tabela tenha milhões de linhas antigas! (Consulte a ADR-001).
+### Unit of Work e Transactional Outbox
+Ao persistir dados via `IApplicationDbContext.SaveChangesAsync()`, o pipeline executa as seguintes etapas:
+1. **Interceptor do EF Core**: O `InsertOutboxMessagesInterceptor` extrai os eventos de domínio registrados na entidade (`RaiseDomainEvent()`) e os grava na tabela `OutboxMessages` dentro da mesma transação de banco de dados.
+2. **Processamento em Background**: O worker `ProcessOutboxMessagesJob` executa periodicamente lendo as mensagens não processadas e as publica para os handlers correspondentes.
+3. **Índice Filtrado e Dead Letter Queue**: A busca das mensagens pendentes utiliza um índice parcial no PostgreSQL (`"ProcessedOnUtc" IS NULL AND "RetryCount" < 5`), mantendo o tempo de consulta em `< 1ms` e isolando mensagens com falhas recorrentes (consulte a [ADR-001](adr/001-indices-filtrados-outbox.md)).
+
+---
+
+## 4. Testes de Performance e Carga (k6 via Docker)
+
+Para validar a vazão (RPS), latência P95 e estabilidade de conexões do PostgreSQL sob carga, execute com a API em execução:
+
+```bash
+docker compose -f load-tests/docker-compose.k6.yml up
+```
+
+O k6 executará uma rampa suave de até 50 usuários virtuais (VUs) e exibirá o resumo das métricas diretamente no seu terminal (consulte a [ADR-006](adr/006-testes-de-carga-desacoplados-k6-docker.md) e [load-tests/README.md](../load-tests/README.md)).

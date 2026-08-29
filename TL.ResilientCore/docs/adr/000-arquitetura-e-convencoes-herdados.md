@@ -1,8 +1,6 @@
 # ADR 000: Arquitetura Base e Convenções do TL.ResilientCore
 
----
-
-## 📌 Contexto e Forças em Conflito
+## 1. Contexto e Forças
 
 Ao iniciar o desenvolvimento de microsserviços corporativos de missão crítica, times de desenvolvimento frequentemente enfrentam desafios de:
 1. **Acoplamento Arquitetural**: Lógica de domínio misturada com detalhes de framework web, bibliotecas de banco de dados ou mensageria.
@@ -15,9 +13,9 @@ Precisamos de uma fundação arquitetural padronizada, robusta, altamente testá
 
 ---
 
-## 💡 Decisão Adotada
+## 2. Decisão
 
-Adotamos a combinação sinérgica dos seguintes pilares como convenção padrão herdada no **TL.ResilientCore**:
+Adotamos a combinação dos seguintes pilares como convenção padrão herdada no **TL.ResilientCore**:
 
 1. **Clean Architecture (Onion/Hexagonal)**:
    - Divisão estrita em 4 camadas: `Domain` (núcleo puro), `Application` (casos de uso e CQRS), `Infrastructure` (persistência EF Core e adaptadores externos) e `Presentation.Api` (Minimal APIs e autenticação).
@@ -31,9 +29,9 @@ Adotamos a combinação sinérgica dos seguintes pilares como convenção padrã
    - Eliminação de `throw new Exception` para regras de negócio (conforme [ADR-002](002-result-pattern.md)).
    - Métodos de domínio e casos de uso retornam `Result` ou `Result<TValue>`, com erros mapeados por `ResultExtensions` diretamente para respostas HTTP (200 OK, 400 Bad Request, 404 Not Found).
 
-4. **Outbox Pattern com Índices Filtrados**:
+4. **Outbox Pattern com Índices Filtrados e Dead Letter**:
    - Captura automática de `IDomainEvent` via `InsertOutboxMessagesInterceptor` do EF Core, gravando na tabela `OutboxMessages` na mesma transação atômica do banco.
-   - Índice filtrado (`HasFilter("\"ProcessedOnUtc\" IS NULL")`) no PostgreSQL, garantindo que a busca do worker `ProcessOutboxMessagesJob` ocorra em `< 1ms` independente do volume histórico (conforme [ADR-001](001-indices-filtrados-outbox.md)).
+   - Índice filtrado (`HasFilter("\"ProcessedOnUtc\" IS NULL AND \"RetryCount\" < 5")`) no PostgreSQL, garantindo que a busca do worker `ProcessOutboxMessagesJob` ocorra em `< 1ms` e isole falhas permanentes (conforme [ADR-001](001-indices-filtrados-outbox.md)).
 
 5. **Design for Failure & Idempotência**:
    - Todo handler e consumidor deve ser idempotente (conforme [ADR-004](004-design-for-failure.md)).
@@ -45,7 +43,7 @@ Adotamos a combinação sinérgica dos seguintes pilares como convenção padrã
 
 ---
 
-## ⚖️ Alternativas Avaliadas
+## 3. Alternativas Consideradas
 
 - **Arquitetura Tradicional em Camadas (N-Tier Monolítica)**:
   - *Motivo de rejeição*: Alto acoplamento com o banco de dados; regras de negócio dispersas entre controllers e stored procedures/services genéricos.
@@ -58,9 +56,9 @@ Adotamos a combinação sinérgica dos seguintes pilares como convenção padrã
 
 ---
 
-## 🎯 Consequências e Trade-offs
+## 4. Consequências
 
-### Positivas:
+### Pontos Positivos:
 - **Resiliência e Integridade**: Garantia transacional sem perda de eventos e proteção contra indisponibilidade momentânea de brokers.
 - **Performance Previsível**: Consultas da Outbox em tempo submilisegundo e eliminação do overhead de exceptions.
 - **Governança Automatizada**: O build do projeto quebra automaticamente caso algum desenvolvedor viole as regras de arquitetura (via NetArchTest).
@@ -68,5 +66,3 @@ Adotamos a combinação sinérgica dos seguintes pilares como convenção padrã
 
 ### Negativas / Riscos Mitigados:
 - **Boilerplate Estrutural**: Criação de múltiplos arquivos por caso de uso (Command, CommandHandler, Validator). *Mitigação*: Uso do template via CLI (`dotnet new tl-resilientcore`).
-
-
