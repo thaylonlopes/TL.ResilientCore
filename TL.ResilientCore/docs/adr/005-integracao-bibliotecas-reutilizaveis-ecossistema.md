@@ -10,23 +10,17 @@ Para manter o template enxuto e centralizar a evolução desses utilitários com
 
 ## 2. Decisão
 
-Decidimos consumir as bibliotecas do ecossistema oficial **TL** exclusivamente como **pacotes NuGet publicados** (`PackageReference`), segregando o consumo de acordo com a responsabilidade de cada camada da Clean Architecture:
+Decidimos consumir as bibliotecas do ecossistema oficial **TL** exclusivamente como **pacotes NuGet publicados** (`PackageReference`), segregando o consumo de acordo com a responsabilidade de cada camada da Clean Architecture através dos **Metapacotes Estruturais** (`TL.ExtensionLibrary.*` v0.4.1) e do pacote oficial de observabilidade (`TL.MiddlewareLibrary` v0.2.0):
 
-### 2.1. Catálogo de Bibliotecas Integradas
+### 2.1. Catálogo e Metapacotes Integrados por Camada
 
-| Pacote NuGet | Camada | Finalidade no Template |
-| :--- | :--- | :--- |
-| **`TL.EnumExtensionsLibrary`** | `Domain`, `Application` | Conversão e extração de descrições de enums de domínio sem reflection pesada. |
-| **`TL.StringExtensionsLibrary`** | `Domain`, `Application`, `Api` | Validações e manipulações funcionais de texto e sanitização de entrada. |
-| **`TL.NumericExtensionsLibrary`** | `Domain` | Validações numéricas e predicados de domínio. |
-| **`TL.QueryableExtensionsLibrary`** | `Application` | Filtros dinâmicos (`.Filter()`), ordenação (`.Order()`) e paginação (`.Page()`) sobre `IQueryable` nas consultas CQRS. |
-| **`TL.CollectionExtensionsLibrary`** | `Application` | Particionamento e operações seguras sobre coleções em memória. |
-| **`TL.ObjectExtensionsLibrary`** | `Application` | Operações e clonagem tipada de objetos. |
-| **`TL.HttpClientExtensionsLibrary`** | `Infrastructure` | Métodos fluentes para consumo e deserialização com `HttpClient`. |
-| **`TL.AssemblyExtensionLibrary`** | `Infrastructure` | Leitura de metadados e inspeção tipada de assemblies. |
-| **`TL.DateTimeExtensionsLibrary`** | `Infrastructure` | Utilitários de cálculo e formatação de períodos temporais. |
-| **`TL.ClaimsPrincipalExtensionsLibrary`** | `Api`, `Infrastructure` | Extração simplificada e segura de claims de autenticação (`UserId`, `Email`, `Roles`, `ClaimSub()`). |
-| **`TL.MiddlewareLibrary`** | `Api` | Tratamento global de exceções conforme RFC 7807 (ProblemDetails) e medição de tempo de resposta HTTP. |
+| Camada / Projeto | Pacote NuGet | Versão | Conteúdo Embutido & Finalidade no Template |
+| :--- | :--- | :---: | :--- |
+| **`Domain`** | **`TL.ExtensionLibrary.Domain`** | `0.4.1` | Metapacote agrupador de domínio: `TL.EnumExtensionsLibrary` (Bounded Cache), `TL.NumericExtensionsLibrary` e `TL.StringExtensionsLibrary` (Zero-Allocation). |
+| **`Application`** | **`TL.ExtensionLibrary.Application`** | `0.4.1` | Metapacote agrupador de aplicação: `TL.CollectionExtensionsLibrary`, `TL.ObjectExtensionsLibrary`, `TL.QueryableExtensionsLibrary` (Keyset Pagination) e `TL.EnumExtensionsLibrary`. |
+| **`Infrastructure`** | **`TL.ExtensionLibrary.Infrastructure`** | `0.4.1` | Metapacote agrupador de infraestrutura: `TL.AssemblyExtensionLibrary`, `TL.ClaimsPrincipalExtensionsLibrary`, `TL.DateTimeExtensionsLibrary` e `TL.HttpClientExtensionsLibrary`. |
+| **`Presentation.Api`** | **`TL.MiddlewareLibrary`** | `0.2.0` | Middleware de tratamento global de exceções(ProblemDetails) e métricas de tempo de resposta HTTP. |
+| **`Presentation.Api`** | **`TL.ClaimsPrincipalExtensionsLibrary`** | `0.4.1` | Extração tipada de claims JWT (`UserId`, `Email`, `Roles`, `ClaimSub()`) nos endpoints de API. |
 
 ---
 

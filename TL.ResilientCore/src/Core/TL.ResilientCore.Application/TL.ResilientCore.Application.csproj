@@ -8,11 +8,8 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-    <PackageReference Include="TL.CollectionExtensionsLibrary" Version="0.0.1" />
-    <PackageReference Include="TL.EnumExtensionsLibrary" Version="0.0.3" />
-    <PackageReference Include="TL.ObjectExtensionsLibrary" Version="0.0.1" />
-    <PackageReference Include="TL.QueryableExtensionsLibrary" Version="0.0.1" />
-    <PackageReference Include="TL.StringExtensionsLibrary" Version="0.0.1" />
+    <PackageReference Include="TL.ExtensionLibrary.Application" Version="0.4.1" />
+    <PackageReference Include="TL.QueryableExtensionsLibrary" Version="0.4.1" />
   </ItemGroup>
 
   <PropertyGroup>

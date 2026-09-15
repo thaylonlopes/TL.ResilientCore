@@ -15,9 +15,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="TL.ClaimsPrincipalExtensionsLibrary" Version="0.0.1" />
-    <PackageReference Include="TL.MiddlewareLibrary" Version="0.0.1-beta.2" />
-    <PackageReference Include="TL.StringExtensionsLibrary" Version="0.0.1" />
+    <PackageReference Include="TL.ClaimsPrincipalExtensionsLibrary" Version="0.4.1" />
+    <PackageReference Include="TL.MiddlewareLibrary" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>

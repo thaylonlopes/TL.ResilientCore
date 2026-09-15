@@ -17,10 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
-    <PackageReference Include="TL.AssemblyExtensionLibrary" Version="0.0.1" />
-    <PackageReference Include="TL.ClaimsPrincipalExtensionsLibrary" Version="0.0.1" />
-    <PackageReference Include="TL.DateTimeExtensionsLibrary" Version="0.0.1" />
-    <PackageReference Include="TL.HttpClientExtensionsLibrary" Version="0.0.1" />
+    <PackageReference Include="TL.ExtensionLibrary.Infrastructure" Version="0.4.1" />
   </ItemGroup>
 
   <PropertyGroup>

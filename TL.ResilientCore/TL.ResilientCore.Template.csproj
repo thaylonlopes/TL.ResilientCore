@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <PackageVersion>1.2.1</PackageVersion>
+    <PackageVersion>1.2.2</PackageVersion>
     <PackageId>TL.ResilientCore.Template</PackageId>
     <Title>TL.ResilientCore Starter Kit</Title>
     <Authors>Thaylon Lopes</Authors>
-    <Description>Template .NET corporativo com Clean Architecture, DDD, CQRS, Result Pattern, Outbox Pattern com Dead Letter Queue e Automated Testing Suite.</Description>
-    <PackageTags>dotnet-new;templates;clean-architecture;cqrs;outbox;ddd;testcontainers;mediatr;dead-letter-queue;k6;load-tests</PackageTags>
+    <Description>Template .NET corporativo com Clean Architecture, DDD, CQRS, Result Pattern, Outbox Pattern com Dead Letter Queue, Metapacotes TL.ExtensionLibrary v0.4.1 e Testes de Carga k6.</Description>
+    <PackageTags>dotnet-new;templates;clean-architecture;cqrs;outbox;ddd;testcontainers;mediatr;dead-letter-queue;k6;load-tests;metapackages</PackageTags>
     <TargetFramework>net9.0</TargetFramework>
 
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <Copyright>Copyright © 2026 Thaylon Lopes</Copyright>
     
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
@@ -25,6 +27,7 @@
     <Compile Remove="**\*" />
 
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="assets\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
