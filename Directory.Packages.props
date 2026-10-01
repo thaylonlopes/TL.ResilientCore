@@ -1,0 +1,43 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Packages.props, $(MSBuildThisFileDirectory)..))" Condition="Exists('$([MSBuild]::GetPathOfFileAbove(Directory.Packages.props, $(MSBuildThisFileDirectory)..))')" />
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageVersion Include="MediatR" Version="14.2.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="1.6.17" />
+    <PackageVersion Include="NetArchTest.Rules" Version="1.3.2" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="1.2.3" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.14.0" />
+    <PackageVersion Include="TL.AuditLogger" Version="0.5.0" />
+    <PackageVersion Include="TL.BaseContracts" Version="0.5.0" />
+    <PackageVersion Include="TL.Caching.Helpers" Version="0.5.0" />
+    <PackageVersion Include="TL.ClaimsPrincipalExtensionsLibrary" Version="0.8.0" />
+    <PackageVersion Include="TL.ExtensionLibrary.Application" Version="0.8.0" />
+    <PackageVersion Include="TL.ExtensionLibrary.Domain" Version="0.8.0" />
+    <PackageVersion Include="TL.ExtensionLibrary.Infrastructure" Version="0.8.0" />
+    <PackageVersion Include="TL.HealthCheck" Version="0.5.0" />
+    <PackageVersion Include="TL.KeysetPagination" Version="0.5.0" />
+    <PackageVersion Include="TL.MiddlewareLibrary" Version="0.5.0" />
+    <PackageVersion Include="TL.QueryableExtensionsLibrary" Version="0.8.0" />
+    <PackageVersion Include="TL.RabbitMQ" Version="0.6.0" />
+    <PackageVersion Include="TL.Resilience" Version="0.5.0" />
+    <PackageVersion Include="xunit" Version="2.9.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+</Project>
