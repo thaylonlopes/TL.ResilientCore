@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Thaylon Lopes</Authors>
+    <Company>Thaylon Lopes</Company>
+    <Product>TL.ResilientCore</Product>
+    <Copyright>Copyright © 2026 Thaylon Lopes. Todos os direitos reservados.</Copyright>
+    <PackageProjectUrl>https://github.com/thaylonlopes/TL.ResilientCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thaylonlopes/TL.ResilientCore</RepositoryUrl>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Thaylon Lopes",
+  "classifications": [ "Web", "WebAPI", "Clean Architecture", "Microservices", "Outbox" ],
+  "identity": "TL.ResilientCore.Template",
+  "name": "TL ResilientCore Clean Architecture Template",  
+  "shortName": "tl-resilientcore",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "sourceName": "TL.ResilientCore",
+  "preferNameDirectory": true,
+  "sources": [
+    {
+      "rename": {
+        "_gitignore": ".gitignore",
+        "_editorconfig": ".editorconfig"
+      },
+      "modifiers": [
+        {
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**",
+            "**/.vs/**",
+            "**/.git/**",
+            "**/*.user",
+            "**/*.suo",
+            "**/*.lock.json",
+            "**/artifacts/**",
+            "**/nupkg/**",
+            "**/*.nupkg",
+            ".template.config/**"
+          ]
+        }
+      ]
+    }
+  ],
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "Target framework for the project",
+      "datatype": "string",
+      "defaultValue": "net9.0",
+      "replaces": "net9.0"
+    }
+  }
+}

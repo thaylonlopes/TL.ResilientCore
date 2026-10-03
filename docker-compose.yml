@@ -1,0 +1,52 @@
+services:
+  tl-api:
+    build:
+      context: .
+      dockerfile: src/Presentation/TL.ResilientCore.Api/Dockerfile
+    container_name: tl_resilient_api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Database=Host=tl-postgres;Port=5432;Database=TLResilientDb;Username=postgres;Password=postgres
+      - ConnectionStrings__Redis=tl-redis:6379
+      - RabbitMq__HostName=tl-rabbitmq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - tl-postgres
+      - tl-redis
+      - tl-rabbitmq
+    restart: unless-stopped
+
+  tl-postgres:
+    image: postgres:16-alpine
+    container_name: tl_resilient_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: TLResilientDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  tl-redis:
+    image: redis:7-alpine
+    container_name: tl_resilient_cache
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  tl-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: tl_resilient_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
