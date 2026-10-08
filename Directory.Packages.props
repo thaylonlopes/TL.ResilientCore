@@ -32,7 +32,7 @@
     <PackageVersion Include="TL.ExtensionLibrary.Domain" Version="0.8.0" />
     <PackageVersion Include="TL.ExtensionLibrary.Infrastructure" Version="0.8.0" />
     <PackageVersion Include="TL.HealthCheck" Version="0.5.0" />
-    <PackageVersion Include="TL.KeysetPagination" Version="0.5.0" />
+    <PackageVersion Include="TL.PagingFiltering.Helpers" Version="0.5.0" />
     <PackageVersion Include="TL.MiddlewareLibrary" Version="0.5.0" />
     <PackageVersion Include="TL.QueryableExtensionsLibrary" Version="0.8.0" />
     <PackageVersion Include="TL.RabbitMQ" Version="0.6.0" />

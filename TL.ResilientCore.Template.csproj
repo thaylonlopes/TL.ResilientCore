@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <PackageVersion>1.3.0</PackageVersion>
+    <PackageVersion>1.3.1</PackageVersion>
     <PackageId>TL.ResilientCore.Template</PackageId>
     <Title>TL.ResilientCore Starter Kit</Title>
     <Authors>Thaylon Lopes</Authors>
@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <!-- Inclusão explícita dos arquivos da solução + metadados de template .template.config + load-tests -->
-    <Content Include=".template.config\**\*;src\**\*;tests\**\*;docs\**\*;load-tests\**\*;*.sln;docker-compose*.yml;Directory.Packages.props;Directory.Build.props;ARCHITECTURE.md;.github\**\*" 
+    <Content Include=".template.config\**\*;src\**\*;tests\**\*;docs\**\*;load-tests\**\*;*.sln;docker-compose*.yml;Directory.Packages.props;Directory.Build.props;.github\**\*" 
              Exclude="**\bin\**;**\obj\**;**\*.user;**\artifacts\**;**\nupkg\**;**\load-tests\results\**" />
     <Compile Remove="**\*" />
 

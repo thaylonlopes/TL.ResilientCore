@@ -19,7 +19,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="TL.Caching.Helpers" />
     <PackageReference Include="TL.ExtensionLibrary.Infrastructure" />
-    <PackageReference Include="TL.KeysetPagination" />
+    <PackageReference Include="TL.PagingFiltering.Helpers" />
     <PackageReference Include="TL.RabbitMQ" />
     <PackageReference Include="TL.Resilience" />
   </ItemGroup>

@@ -22,7 +22,7 @@ Consumir as bibliotecas do ecossistema oficial **TL** exclusivamente como **paco
 | **`Application`** | **`TL.QueryableExtensionsLibrary`** | `0.8.0` | Extensões LINQ e IQueryable para projeções e consultas otimizadas. |
 | **`Infrastructure`** | **`TL.ExtensionLibrary.Infrastructure`** | `0.8.0` | Metapacote agrupador de infraestrutura: reflexão de assemblies, manipulação de datas e clientes HTTP. |
 | **`Infrastructure`** | **`TL.Caching.Helpers`** | `0.5.0` | Abstrações e utilitários para estratégias de cache distribuído/em memória e controle de expiração. |
-| **`Infrastructure`** | **`TL.KeysetPagination`** | `0.5.0` | Paginação determinística baseada em cursor/keyset para PostgreSQL/EF Core em grandes volumes. |
+| **`Infrastructure`** | **`TL.PagingFiltering.Helpers`** | `0.5.0` | Paginação determinística (keyset/offset) e filtros dinâmicos via Specification Pattern. |
 | **`Infrastructure`** | **`TL.Resilience`** | `0.5.0` | Estratégias de resiliência e políticas de retry/circuit-breaker integradas ao pipeline de infraestrutura. |
 | **`Presentation.Api`** | **`TL.MiddlewareLibrary`** | `0.5.0` | Middlewares para tratamento global de exceções (RFC 7807 ProblemDetails), correlação e métricas HTTP. |
 | **`Presentation.Api`** | **`TL.AuditLogger`** | `0.5.0` | Registro estruturado de auditoria e telemetria de requisições na borda da API. |
